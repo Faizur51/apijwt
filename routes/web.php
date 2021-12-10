@@ -16,3 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/login',function (){
+    return response()->json('unAuthorised,first u can log in');
+})->name('login');
