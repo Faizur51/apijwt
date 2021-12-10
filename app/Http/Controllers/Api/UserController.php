@@ -14,11 +14,7 @@ class UserController extends Controller
     public function index()
     {
         $user=User::select('id','name','email')->orderBy('id','desc')->get();
-        return response()->json([
-               'data'=>$user,
-                'status'=>true,
-              'message'=>'successfully show the  User list'
-        ],201);
+        return success_response($user,'user list show successfully',201);
     }
 
 
@@ -32,10 +28,7 @@ class UserController extends Controller
         ]);
 
         if($validator->fails()){
-            return response()->json([
-                'status'=>true,
-                'message'=>$validator->errors()
-            ]);
+                  return error_validation($validator->errors());
         }
 
         try{
@@ -45,17 +38,10 @@ class UserController extends Controller
                 'password'=>Hash::make($request->password),
             ]);
 
-            return response()->json([
-                'status'=>true,
-                'data'=>$user->only('name','email'),
-                'message'=>'User create successfully'
-            ]);
+            return success_response($user,'user created successfully',201);
 
         }catch(Exception $e){
-            return response()->json([
-                'status'=>false,
-                'message'=>'something went worng'
-            ]);
+            return error_response('Something went worng',400);
         }
 
     }
@@ -64,16 +50,10 @@ class UserController extends Controller
     {
        $user=User::find($id);
        if($user){
-           return response()->json([
-               'status'=>true,
-               'data'=>$user->only('id','email','name'),
-               'message'=>'succesfully show the user'
-           ],201);
+           return success_response($user->only('id','email','name'),'user show successfully',201);
+
        }else{
-           return response()->json([
-               'status'=>false,
-               'message'=>'opps not show the user'
-           ]);
+           return error_response('opps not show the user',400);
        }
 
     }
@@ -90,25 +70,18 @@ class UserController extends Controller
             ]);
 
             if($validator->fails()){
-                return response()->json([
-                    'status'=>true,
-                    'message'=>$validator->errors()
-                ]);
+                return error_validation($validator->errors());
             }
 
             try{
                 $user->name=$request->name;
                 $user->update();
-                return response()->json([
-                    'status'=>true,
-                    'data'=>$user->name,
-                    'message'=>'user update succesfully'
-                ]);
+                return success_response($user->only('id','email','name'),'user update succesfully',201);
+
             }catch(Exception $e){
-                return response()->json([
-                    'status'=>false,
-                    'message'=>'user update not succesfully'
-                ]);
+
+                return error_response('user update not succesfully',400);
+
             }
 
         }else{
@@ -125,15 +98,11 @@ class UserController extends Controller
         $user=User::find($id);
         if($user){
             $user->delete();
-            return  response()->json([
-                'status'=>true,
-                 'message'=>'successfully delete user'
-          ]);
+            return success_response($user->only('id','email','name'),'successfully delete user',201);
+
         }else{
-            return  response()->json([
-                'status'=>false,
-                'message'=>'not possible to delete user'
-            ]);
+            return error_response('not possible to update user data ',400);
+
         }
     }
 }
