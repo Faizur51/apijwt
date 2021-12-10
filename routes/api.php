@@ -34,6 +34,8 @@ Route::prefix('v1')->middleware('auth:api')->group(function(){
 
        Route::post('/users',[UserController::class,'store']);
        Route::patch('/users/{id}',[UserController::class,'update']);
+
+    Route::post('/auth/logout',[AuthController::class,'logout']);
 });
 
 
