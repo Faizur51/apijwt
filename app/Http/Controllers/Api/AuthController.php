@@ -31,12 +31,7 @@ class AuthController extends Controller
        }else{
            return response()->json('Token not found');
        }
-
-
-
     }
-
-
 
     public function logout(){
         auth()->logout();
